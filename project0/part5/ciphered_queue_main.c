@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-// Helper function to print the queue contents (encoded names)
+// Helper function to print the queue contents
 void print_queue(queue_t *queue) {
     node_t *current = queue->front;
     if (current == NULL) {
@@ -34,24 +34,24 @@ int main() {
     process_t *p1 = (process_t *)malloc(sizeof(process_t));
     p1->id = 1;
     p1->name = strdup("A");
-    encode(p1->name, cipher_key); // Encode name
     printf("Enqueue: [id: %d, name: %s] is enqueued. ", p1->id, p1->name);
+    encode(p1->name, cipher_key); // Encode name
     enqueue(&queue, p1);
     print_queue(&queue);
 
     process_t *p2 = (process_t *)malloc(sizeof(process_t));
     p2->id = 2;
     p2->name = strdup("B");
-    encode(p2->name, cipher_key); // Encode name
     printf("Enqueue: [id: %d, name: %s] is enqueued. ", p2->id, p2->name);
+    encode(p2->name, cipher_key); // Encode name
     enqueue(&queue, p2);
     print_queue(&queue);
 
     process_t *p3 = (process_t *)malloc(sizeof(process_t));
     p3->id = 3;
     p3->name = strdup("C");
-    encode(p3->name, cipher_key); // Encode name
     printf("Enqueue: [id: %d, name: %s] is enqueued. ", p3->id, p3->name);
+    encode(p3->name, cipher_key); // Encode name
     enqueue(&queue, p3);
     print_queue(&queue);
 
