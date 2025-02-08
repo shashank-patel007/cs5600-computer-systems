@@ -1,0 +1,50 @@
+name: CI for Project 1
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  format-check:
+    name: Check Code Formatting
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Clang-Format
+        run: sudo apt update && sudo apt install -y clang-format
+
+      - name: Check Formatting
+        working-directory: ./project1
+        run: |
+          clang-format --dry-run --Werror *.c *.h
+
+  build-and-test:
+    name: Build and Run Tests
+    runs-on: ubuntu-latest
+    needs: format-check
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: sudo apt update && sudo apt install -y make gcc valgrind
+
+      - name: Build Project
+        working-directory: ./project1
+        run: make part-1
+
+      - name: Run Tests
+        working-directory: ./project1
+        run: ./part-1 < test_input.txt > test_output.txt
+
+      - name: Run Valgrind for Memory Check
+        working-directory: ./project1
+        run: valgrind --leak-check=full ./part-1 < test_input.txt
