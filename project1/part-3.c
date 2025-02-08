@@ -13,7 +13,8 @@ extern void *setup_stack0(void *_stack, void *func);
 
 /* ---------- */
 
-/* write these */
+/* write these 
+*/
 int read(int fd, void *ptr, int len);
 int write(int fd, void *ptr, int len);
 void exit(int err);
@@ -37,14 +38,16 @@ void do_uexit(void);
 
 /* ---------- */
 
-void main(void) {
-    vector[1] = do_print;
-    vector[3] = do_yield12;
-    vector[4] = do_yield21;
-    vector[5] = do_uexit;
+void main(void)
+{
+	vector[1] = do_print;
 
-    /* your code here */
+	vector[3] = do_yield12;
+	vector[4] = do_yield21;
+	vector[5] = do_uexit;
 
-    do_print("done\n");
-    exit(0);
+	/* your code here */
+
+	do_print("done\n");
+	exit(0);
 }
