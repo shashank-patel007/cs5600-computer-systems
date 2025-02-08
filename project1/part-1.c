@@ -8,12 +8,14 @@
 
 #define BUFFER_SIZE 200
 
-/* write these functions */
+/* Function prototypes */
 int read(int fd, void *ptr, int len);
 int write(int fd, void *ptr, int len);
 void exit(int err);
 void readline(char *buffer, int len);
 void print(char *input);
+
+/* ---------- */
 
 /* System call wrappers */
 int read(int fd, void *ptr, int len) {
@@ -29,9 +31,6 @@ void exit(int err) {
 }
 
 /* ---------- */
-
-/* Factor, factor! Don't put all your code in main()! 
-*/
 
 /* Reads one line from stdin (file descriptor 0) into a buffer */
 void readline(char *buffer, int len) {
@@ -58,7 +57,8 @@ void readline(char *buffer, int len) {
     }
     buffer[i] = '\0';
 
-    while (ch != '\n' && read(0, &ch, 1) > 0);
+    while (ch != '\n' && read(0, &ch, 1) > 0)
+        ;
 }
 
 /* Prints a string to stdout (file descriptor 1) */
@@ -77,6 +77,8 @@ void print(char *input) {
 
     write(1, buffer, len);
 }
+
+/* ---------- */
 
 /* Main function */
 int main(void) {
