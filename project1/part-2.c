@@ -11,8 +11,7 @@ extern void *vector[];
 
 /* ---------- */
 
-/* write these functions 
-*/
+/* write these functions */
 int read(int fd, void *ptr, int len);
 int write(int fd, void *ptr, int len);
 void exit(int err);
@@ -33,7 +32,7 @@ int munmap(void *addr, int len);
 
 void do_readline(char *buf, int len);
 void do_print(char *buf);
-char *do_getarg(int i);         
+char *do_getarg(int i);
 
 /* ---------- */
 
@@ -46,7 +45,7 @@ char *do_getarg(int i);
  *   munmap each mmap'ed region so we don't crash the 2nd time
  */
 
-/* your code here */
+/* YOUR CODE HERE */
 
 /* ---------- */
 
@@ -57,31 +56,28 @@ char *do_getarg(int i);
  *   int argc = split(argv, 10, buffer);
  *   ... pointers to words are in argv[0], ... argv[argc-1]
  */
-int split(char **argv, int max_argc, char *line)
-{
-	int i = 0;
-	char *p = line;
+int split(char **argv, int max_argc, char *line) {
+    int i = 0;
+    char *p = line;
 
-	while (i < max_argc) {
-		while (*p != 0 && (*p == ' ' || *p == '\t' || *p == '\n'))
-			*p++ = 0;
-		if (*p == 0)
-			return i;
-		argv[i++] = p;
-		while (*p != 0 && *p != ' ' && *p != '\t' && *p != '\n')
-			p++;
-	}
-	return i;
+    while (i < max_argc) {
+        while (*p != 0 && (*p == ' ' || *p == '\t' || *p == '\n'))
+            *p++ = 0;
+        if (*p == 0)
+            return i;
+        argv[i++] = p;
+        while (*p != 0 && *p != ' ' && *p != '\t' && *p != '\n')
+            p++;
+    }
+    return i;
 }
 
 /* ---------- */
 
-void main(void)
-{
-	vector[0] = do_readline;
-	vector[1] = do_print;
-	vector[2] = do_getarg;
+void main(void) {
+    vector[0] = do_readline;
+    vector[1] = do_print;
+    vector[2] = do_getarg;
 
-	/* YOUR CODE HERE */
+    /* YOUR CODE HERE */
 }
-

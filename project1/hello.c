@@ -4,9 +4,7 @@
 
 extern void print(char *buf);
 
-int main(void)
-{
+int main(void) {
     print("Hello world!\n");
     return 0;
 }
-
