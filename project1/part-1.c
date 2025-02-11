@@ -12,8 +12,6 @@
 int read(int fd, void *ptr, int len);
 int write(int fd, void *ptr, int len);
 void exit(int err);
-void readline(char *buffer, int len);
-void print(char *input);
 
 /* System call wrappers */
 int read(int fd, void *ptr, int len) {
@@ -33,8 +31,11 @@ void exit(int err) {
 /* Factor, factor! Don't put all your code in main()! 
 */
 
+void readline(char *buf, int len);
+void print(char *buf);
+
 /* Reads one line from stdin (file descriptor 0) into a buffer */
-void readline(char *buffer, int len) {
+void readline(char *buf, int len) {
     int i = 0;
     char ch;
     long input;
@@ -53,29 +54,29 @@ void readline(char *buffer, int len) {
             break;
         }
 
-        buffer[i] = ch;
+        buf[i] = ch;
         i++;
     }
-    buffer[i] = '\0';
+    buf[i] = '\0';
 
     while (ch != '\n' && read(0, &ch, 1) > 0);
 }
 
 /* Prints a string to stdout (file descriptor 1) */
-void print(char *input) {
+void print(char *buf) {
     int len = 0;
 
-    while (input[len] != '\0') {
+    while (buf[len] != '\0') {
         len++;
     }
 
-    char buffer[len];
+    char temp[len];
 
     for (int i = 0; i < len; i++) {
-        buffer[i] = input[i];
+        temp[i] = buf[i];
     }
 
-    write(1, buffer, len);
+    write(1, temp, len);
 }
 
 /* Main function */

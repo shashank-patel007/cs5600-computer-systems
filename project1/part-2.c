@@ -70,11 +70,11 @@ int munmap(void *addr, int len) {
  *  - use global variables for getarg
  */
 
-void do_readline(char *buffer, int len);
+void do_readline(char *buf, int len);
 void do_print(char *buf);
 char *do_getarg(int i);         
 
-void do_readline(char *buffer, int len) {
+void do_readline(char *buf, int len) {
 	int i = 0;
     char ch;
     long input;
@@ -93,28 +93,28 @@ void do_readline(char *buffer, int len) {
             break;
         }
 
-        buffer[i] = ch;
+        buf[i] = ch;
         i++;
     }
-    buffer[i] = '\0';
+    buf[i] = '\0';
 
     while (ch != '\n' && read(0, &ch, 1) > 0);
 }
 
-void do_print(char *input) {
+void do_print(char *buf) {
 	int len = 0;
 
-    while (input[len] != '\0') {
+    while (buf[len] != '\0') {
         len++;
     }
 
-    char buffer[len];
+    char temp[len];
 
     for (int i = 0; i < len; i++) {
-        buffer[i] = input[i];
+        temp[i] = buf[i];
     }
 
-    write(1, buffer, len);
+    write(1, temp, len);
 }
 
 char *do_getarg(int i) {
