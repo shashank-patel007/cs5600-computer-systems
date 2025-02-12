@@ -109,11 +109,17 @@ void *exec_file(char *filename, unsigned long offset) {
     for (int i = 0; i < n; i++) {
         if (phdrs[i].p_type == PT_LOAD) {
             int len = ROUND_UP(phdrs[i].p_memsz, 4096);
-            void *buf = mmap((void *)(offset + phdrs[i].p_vaddr), len, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+
+            unsigned long request_addr = offset + (unsigned long)phdrs[i].p_vaddr;
+            unsigned long desired_addr = ROUND_DOWN(request_addr, 4096UL);
+            
+            void *buf = mmap((void *)desired_addr, len, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+            
             if (buf == MAP_FAILED) { 
                 do_print("mmap failed\n"); 
                 exit(1); 
             }
+            
             lseek(fd, phdrs[i].p_offset, SEEK_SET);
             read(fd, (void *)(offset + phdrs[i].p_vaddr), phdrs[i].p_filesz);
         }
@@ -156,9 +162,9 @@ void main(void)
 	stack2 = mmap(0, STACK_SIZE, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 
 	if ((stack1 == MAP_FAILED) || (stack2 == MAP_FAILED)) { 
-                do_print("stack mmap failed\n"); 
-                exit(1); 
-            }
+            do_print("stack mmap failed\n"); 
+            exit(1); 
+        }
 
 	void *entry1 = exec_file("process1", 0x90000000);
 	void *entry2 = exec_file("process2", 0x80000000);

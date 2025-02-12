@@ -158,16 +158,22 @@ void exec_file(char *filename) {
 
     for (int i = 0; i < n; i++) {
 		if (phdrs[i].p_type == PT_LOAD) {
-			int len = ROUND_UP(phdrs[i].p_memsz, 4096);
-			
-            void *buf = mmap((void *)(0x80000000 + phdrs[i].p_vaddr), len, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-            allocated_mem_addr[allocated_mem_count] = (void *)(0x80000000 + phdrs[i].p_vaddr);
-            allocated_mem_size[allocated_mem_count] = len;
-            allocated_mem_count++;
+            int len = ROUND_UP(phdrs[i].p_memsz, 4096UL);
+
+            unsigned long request_addr = 0x80000000UL + (unsigned long)phdrs[i].p_vaddr;
+            unsigned long desired_addr = ROUND_DOWN(request_addr, 4096UL);
+            
+            void *buf = mmap((void *)desired_addr, len, PROT_READ | PROT_WRITE | PROT_EXEC, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+            
             if (buf == MAP_FAILED) { 
                 do_print("mmap failed\n"); 
                 exit(1); 
             }
+
+            allocated_mem_addr[allocated_mem_count] = (void *)desired_addr;
+            allocated_mem_size[allocated_mem_count] = len;
+            allocated_mem_count++;
+
             lseek(fd, phdrs[i].p_offset, SEEK_SET);
             read(fd,(void *)(0x80000000 + phdrs[i].p_vaddr), phdrs[i].p_filesz);
 		}
