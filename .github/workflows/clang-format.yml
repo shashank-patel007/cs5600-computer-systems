@@ -5,6 +5,7 @@ on:
     paths:
       - '**/*.c'
       - '**/*.h'
+    branches: [master, main]
 
 jobs:
   format-check:
