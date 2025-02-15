@@ -2,10 +2,10 @@ name: C Code Formatting Check
 
 on:
   pull_request:
+    branches: [master, main]
     paths:
       - '**/*.c'
       - '**/*.h'
-    branches: [master, main]
 
 jobs:
   format-check:
