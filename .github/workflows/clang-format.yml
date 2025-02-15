@@ -1,30 +1,25 @@
 name: C Code Formatting Check
 
-on:
+on: 
+  push:
+    branches: [main, master]
   pull_request:
-    branches: [master, main]
-    paths:
-      - '**/*.c'
-      - '**/*.h'
+    branches: [main, master]
 
 jobs:
   format-check:
+    name: Formatting Check
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout code
-      - name: Checkout code
-        uses: actions/checkout@v3
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      # Step 2: Install clang-format
-      - name: Install clang-format
-        run: sudo apt-get install -y clang-format
-
-      # Step 3: Run clang-format to check formatting
-      - name: Check C code formatting
-        run: |
-          clang-format --dry-run --Werror **/*.c **/*.h
-
-      # Optional: Provide instructions on fixing formatting
-      - name: Output instructions
-        run: echo "Formatting issues detected. Run 'clang-format -i <file>' locally to fix."
+      # Step 2: Run clang-format style check
+      - name: Run clang-format style check for C/C++ code
+        uses: jidicula/clang-format-action@v4.14.0
+        with:
+          clang-format-version: '13'
+          check-path: '.'  # Checks all files in the repo
+          fallback-style: 'LLVM'  # You can change this to 'Mozilla', 'Google', etc.
