@@ -71,5 +71,5 @@ In part-3.c, process execution and thread switching were implemented:
   - Uses switch_to() to switch between user threads, simulating cooperative multitasking.
 
 Conclusion
-Each part of this project progressively builds on system programming concepts, from basic system calls to ELF execution and user-level threading. This work demonstrates an understanding of low-level operations in UNIX-like systems, including system calls, memory mapping, and context switching.
+Each part of this project progressively builds on system programming concepts, from basic system calls to ELF execution and user-level threading. This work demonstrates our understanding of low-level operations in UNIX-like systems, including system calls, memory mapping, and context switching.
 
