@@ -166,6 +166,7 @@ int fs_getattr(const char *path, struct stat *sb)
     sb->st_mtime = inode.mtime;
     sb->st_atime = inode.mtime;
     sb->st_ctime = inode.mtime;
+    sb->st_blocks = (inode->size + FS_BLOCK_SIZE) / FS_BLOCK_SIZE;
     return 0;
 }
 
