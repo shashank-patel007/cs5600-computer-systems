@@ -133,6 +133,23 @@ void* fs_init(struct fuse_conn_info *conn)
  */
 
 
+ /* Helper: Convert an fs_inode into a struct stat.
+ * This function zeroes out the stat structure and then fills in
+ * the fields that can be derived from the inode.
+ */
+static void inode_to_stat(const struct fs_inode *inode, struct stat *st) {
+    memset(st, 0, sizeof(struct stat));
+    st->st_mode = inode->mode;
+    st->st_uid = inode->uid;
+    st->st_gid = inode->gid;
+    st->st_size = inode->size;
+    st->st_nlink = 1;
+    st->st_mtime = inode->mtime;
+    st->st_atime = inode->mtime;
+    st->st_ctime = inode->mtime;
+    st->st_blocks = (inode->size + FS_BLOCK_SIZE - 1) / FS_BLOCK_SIZE;
+}
+
 
 /* getattr - get file or directory attributes. For a description of
  *  the fields in 'struct stat', see 'man lstat'.
@@ -157,16 +174,7 @@ int fs_getattr(const char *path, struct stat *sb)
     if (read_inode(inum, &inode) < 0)
         return -EIO;
     
-    memset(sb, 0, sizeof(struct stat));
-    sb->st_mode = inode.mode;
-    sb->st_uid = inode.uid;
-    sb->st_gid = inode.gid;
-    sb->st_size = inode.size;
-    sb->st_nlink = 1;
-    sb->st_mtime = inode.mtime;
-    sb->st_atime = inode.mtime;
-    sb->st_ctime = inode.mtime;
-    sb->st_blocks = (inode->size + FS_BLOCK_SIZE) / FS_BLOCK_SIZE;
+    inode_to_stat(&inode, sb);
     return 0;
 }
 
@@ -208,14 +216,7 @@ int fs_readdir(const char *path, void *ptr, fuse_fill_dir_t filler,
             struct fs_inode child_inode;
             if (read_inode(d->inode, &child_inode) < 0)
                 continue;
-            st.st_mode = child_inode.mode;
-            st.st_size = child_inode.size;
-            st.st_uid = child_inode.uid;
-            st.st_gid = child_inode.gid;
-            st.st_mtime = child_inode.mtime;
-            st.st_atime = child_inode.mtime;
-            st.st_ctime = child_inode.mtime;
-            st.st_nlink = 1;
+            inode_to_stat(&child_inode, &st);
             if (filler(ptr, d->name, &st, 0) != 0)
                 break;
         }

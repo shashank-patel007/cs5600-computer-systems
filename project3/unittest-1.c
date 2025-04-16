@@ -101,7 +101,7 @@
      struct statvfs sv;
      int ret = fs_ops.statfs("/", &sv);
      ck_assert_int_eq(ret, 0);
-     ck_assert_int_eq(sv.f_blocks, 400);
+     ck_assert_int_eq(sv.f_blocks, 398);
      // For test.img, total blocks = disk size - 2. The exact value depends on the generated image.
      // You could add more checks based on your image contents.
  }
